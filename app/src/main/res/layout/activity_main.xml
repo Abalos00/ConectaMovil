@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/fondo">
+
+    <Button
+        android:id="@+id/btnGoToRegisterLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="95dp"
+        android:layout_marginEnd="85dp"
+        android:layout_marginBottom="329dp"
+        android:backgroundTint="#57889C"
+        android:text="Inicia Sesión" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="57dp"
+        android:layout_marginBottom="478dp"
+        android:text="Bienvenido a ConectaMóvil"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+</RelativeLayout>
