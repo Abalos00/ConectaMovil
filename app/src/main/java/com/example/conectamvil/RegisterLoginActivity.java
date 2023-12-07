@@ -1,11 +1,12 @@
 package com.example.conectamvil;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,11 +27,13 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class RegisterLoginActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button btnRegister;
     private Button btnLogin;
     private Button btnGoogleSignIn;
+    private CheckBox checkBoxRememberMe;
 
     // Add these for Google Sign-In
     private GoogleSignInOptions gso;
@@ -61,6 +64,17 @@ public class RegisterLoginActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         btnLogin = findViewById(R.id.btnLogin);
         btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        checkBoxRememberMe = findViewById(R.id.checkBoxRememberMe);
+
+        // Retrieve the remember session preference and set the CheckBox state
+        //boolean rememberMe = getRememberMePreference();
+        //checkBoxRememberMe.setChecked(rememberMe);
+
+        // Check if the user is already authenticated
+        //if (rememberMe && firebaseAuth.getCurrentUser() != null) {
+        //    startActivity(new Intent(RegisterLoginActivity.this, MenuPrincipal.class));
+        //    finish(); // Close the login activity to prevent going back to it
+        //}
 
         // Register User with Email
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -74,21 +88,20 @@ public class RegisterLoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Registro exitoso
-                                    Toast.makeText(RegisterLoginActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
-                                    // Aquí podrías dirigir al usuario a la actividad MenuPrincipal si lo deseas
-                                    // por ejemplo, usando un Intent
+                                    // Registration successful
+                                    Toast.makeText(RegisterLoginActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                                    saveRememberMePreference(checkBoxRememberMe.isChecked());
                                     Intent intent = new Intent(RegisterLoginActivity.this, MenuPrincipal.class);
                                     startActivity(intent);
+                                    finish(); // Close the login activity
                                 } else {
-                                    // Si el registro falla, muestra un mensaje al usuario
-                                    Toast.makeText(RegisterLoginActivity.this, "Error en el registro: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                    // If registration fails, display a message to the user
+                                    Toast.makeText(RegisterLoginActivity.this, "Error in registration: " + task.getException(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             }
         });
-
 
         // Login with Email
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -102,14 +115,15 @@ public class RegisterLoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Inicio de sesión exitoso
-                                    Toast.makeText(RegisterLoginActivity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
-                                    // Dirige al usuario a la actividad MenuPrincipal
+                                    // Login successful
+                                    Toast.makeText(RegisterLoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                    saveRememberMePreference(checkBoxRememberMe.isChecked());
                                     Intent intent = new Intent(RegisterLoginActivity.this, MenuPrincipal.class);
                                     startActivity(intent);
+                                    finish(); // Close the login activity
                                 } else {
-                                    // Si el inicio de sesión falla, muestra un mensaje al usuario
-                                    Toast.makeText(RegisterLoginActivity.this, "Error en el inicio de sesión: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                    // If login fails, display a message to the user
+                                    Toast.makeText(RegisterLoginActivity.this, "Error in login: " + task.getException(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -174,6 +188,24 @@ public class RegisterLoginActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        // Guarda la preferencia de recordar sesión cuando la actividad se detiene
+        saveRememberMePreference(checkBoxRememberMe.isChecked());
+    }
+
+    // Métodos para manejar las preferencias de recordar sesión
+    private void saveRememberMePreference(boolean rememberMe) {
+        // Usa SharedPreferences para almacenar la preferencia
+        getPreferences(MODE_PRIVATE).edit().putBoolean("rememberMe", rememberMe).apply();
+    }
+
+    private boolean getRememberMePreference() {
+        // Recupera la preferencia almacenada. El segundo parámetro es el valor predeterminado si no se encuentra ninguna preferencia.
+        return getPreferences(MODE_PRIVATE).getBoolean("rememberMe", false);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         Log.d("Tag", "onStart");
@@ -189,12 +221,6 @@ public class RegisterLoginActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.d("Tag", "onPause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("Tag", "onStop");
     }
 
     @Override

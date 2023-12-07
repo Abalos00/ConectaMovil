@@ -13,11 +13,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="95dp"
-        android:layout_marginEnd="85dp"
-        android:layout_marginBottom="329dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginEnd="87dp"
+        android:layout_marginBottom="90dp"
         android:backgroundTint="#57889C"
-        android:text="Inicia Sesión" />
+        android:text="Inicia Sesión"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/textView"
